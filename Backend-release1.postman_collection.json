@@ -1,0 +1,716 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Backend-release1",
+		"_postman_id": "e2211239-5761-ac1d-3877-a10837e097cf",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"description": "Pruebas de consulta de usuarios",
+			"item": [
+				{
+					"name": "Consulto usuario con id valido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Prueba usuario\"] = jsonData[0].usua_id === 15;",
+									"tests[\"Prueba nombre\"] = jsonData[0].usua_nomb === \"Alejandra\";",
+									"tests[\"Prueba apellido\"] = jsonData[0].usua_apel === \"Pellicano\";",
+									"tests[\"Prueba email\"] = jsonData[0].usua_email === \"apellicano@sra.org.ar\";",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/API/usuarios/Usuario/?usua_id=15",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"API",
+								"usuarios",
+								"Usuario",
+								""
+							],
+							"query": [
+								{
+									"key": "usua_id",
+									"value": "15",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Consulta de usuario valida"
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta de usuario con id no valido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"//tests[\"Status code is 404\"] = responseCode.code === 400;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Error\"] = jsonData[0].Error === \"True\";",
+									"tests[\"Test Mensaje\"] = jsonData[0].Message === \"El id del usuario no es válido\";",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/API/usuarios/Usuario/?usua_id=X",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"API",
+								"usuarios",
+								"Usuario",
+								""
+							],
+							"query": [
+								{
+									"key": "usua_id",
+									"value": "X",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Consulto un numero id no valido en formato. Error de validación de datos de entrada"
+					},
+					"response": []
+				},
+				{
+					"name": "No traiga todos los usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Error\"] = jsonData[0].Error === \"True\";",
+									"tests[\"Test Mensaje\"] = jsonData[0].Message === \"El id del usuario no es válido\";",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://192.168.123.17/wsrest/API/usuarios/usuario",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Todos los usuarios"
+					},
+					"response": []
+				},
+				{
+					"name": "Usuario no existe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/API/usuarios/Usuario/?usua_id=100000000",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"API",
+								"usuarios",
+								"Usuario",
+								""
+							],
+							"query": [
+								{
+									"key": "usua_id",
+									"value": "100000000",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Localidad",
+			"description": "Prueba funcional de servicio de localidad https://sites.google.com/a/sra.org.ar/itwiki/home/liberia-de-servicios/consulta-de-locadidades",
+			"item": [
+				{
+					"name": "Todas las localidades",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Item de la lista\"] = jsonData.length >= 7583",
+									"//como cuento la cantidad de item de una lista",
+									"tests[\"Count: \"  + jsonData.length] = true;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://192.168.123.17/wsrest/Localidades/Localidades/\n",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Prueba de lista de localidades"
+					},
+					"response": []
+				},
+				{
+					"name": "La localidad con id= 158548",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test no error\"] = jsonData[0].Error === \"False\";",
+									"tests[\"Test nombre id\"] = jsonData[0].loca_id === 158548;",
+									"tests[\"Test localidad descripción\"] = jsonData[0].loca_desc === \"ANGOSTURA\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?loca_id=158548",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_id",
+									"value": "158548",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localidad con id no existente (158548323)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Prueba de error encontrado\"] = jsonData[0].Error === \"True\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?loca_id=158548323",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_id",
+									"value": "158548323",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Id que no existe"
+					},
+					"response": []
+				},
+				{
+					"name": "Localidad con id no valido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Error\"] = jsonData[0].Error === \"True\";",
+									"tests[\"Test Mensaje\"] = jsonData[0].Message === \"El id del usuario no es válido\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?loca_id=XA1",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_id",
+									"value": "XA1",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localidad con codPos=3416",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Item de la lista\"] = jsonData.length === 3",
+									"//como cuento la cantidad de item de una lista",
+									"tests[\"Count: \"  + jsonData.length] = true;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?loca_cpos=3416",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_cpos",
+									"value": "3416 ",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localidades de la provincia con id=654",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Item de la lista\"] = jsonData.length === 284",
+									"tests[\"Test Provincia 1\"] = jsonData[0].loca_pcia_id === 654",
+									"tests[\"Test Provincia 2\"] = jsonData[13].loca_pcia_id === 654",
+									"//como cuento la cantidad de item de una lista",
+									"tests[\"Count: \"  + jsonData.length] = true;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?&loca_pcia_id =654",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_pcia_id ",
+									"value": "654",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "",
+									"value": ""
+								},
+								{
+									"key": "loca_pcia_id",
+									"value": "654"
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localidades de una provincia con codigo invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Error\"] = jsonData[0].Error === \"True\";",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?&loca_pcia_id =6SX",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_pcia_id ",
+									"value": "6SX",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "",
+									"value": ""
+								},
+								{
+									"key": "loca_pcia_id",
+									"value": "6SX"
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localidad Provinca con codigo inexistente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Prueba de error encontrado\"] = jsonData[0].Error === \"True\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?&loca_pcia_id =11111111",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_pcia_id ",
+									"value": "11111111",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "",
+									"value": ""
+								},
+								{
+									"key": "loca_pcia_id",
+									"value": "11111111"
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta todas las localidades por descripcion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test nombre 1\"] = jsonData[0].loca_desc === \"SAN AGUSTIN\";",
+									"tests[\"Test nombre 2\"] = jsonData[3].loca_desc === \"SAN AGUSTIN\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?&loca_desc=San Agustin",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_desc",
+									"value": "San Agustin",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "",
+									"value": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Busqueda por descripcion y provincia",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test Item de la lista\"] = jsonData.length === 1",
+									"tests[\"Test Provincia\"] = jsonData[0].loca_pcia_id === 654",
+									"tests[\"Test Descripcion provincia\"] = jsonData[0].loca_desc === \"San Agustín\"",
+									"//como cuento la cantidad de item de una lista",
+									"tests[\"Count: \"  + jsonData.length] = true;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "http://192.168.123.17/wsrest/Localidades/Localidades/?loca_desc=San Agustin&loca_pcia_id=654",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"123",
+								"17"
+							],
+							"path": [
+								"wsrest",
+								"Localidades",
+								"Localidades",
+								""
+							],
+							"query": [
+								{
+									"key": "loca_desc",
+									"value": "San Agustin",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "loca_pcia_id",
+									"value": "654",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
